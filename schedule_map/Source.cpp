@@ -35,10 +35,10 @@ void query(int n) {
 		else if (command == "NEXT") {
 			vector<vector<string>> temp;
 			k+=1;
-			if (k > 12) {
-				k %= 13;
+			if (k > 11) {
+				k %= 11;
 			}				
-			else if (k == 2)
+			if (k == 2)
 				make_full(28,temp);
 			else if (k%2==1)
 				make_full(31, temp);
