@@ -5,10 +5,11 @@
 
 using namespace std;
 
-void New_Bus(map<string, vector<string>>& bus_stop) {
+void New_Bus(map<string, vector<string>>& bus_stop, vector<string>& buses) {
 	string name;
 	int stop_count;
 	cin >> name >> stop_count;
+	buses.push_back(name);
 	for (int i = 0; i < stop_count; i++) {
 		string stop;
 		cin >> stop;
@@ -16,21 +17,35 @@ void New_Bus(map<string, vector<string>>& bus_stop) {
 	}
 }
 
-vector<string> busesForStop(const map<string, vector<string>>& bus_stop, const string& stop) {
+vector<string> busesForStop(const map<string, vector<string>>& bus_stop, const string& stop,const vector<string>& bus) {
 	vector<string> buses;
-	for (auto key : bus_stop) {
-		for (auto name_stop:key.second)
-		{
-			if (name_stop == stop) {
-				buses.push_back(key.first);
+	for (auto every : bus) {
+		for (auto key : bus_stop) {
+			if (every == key.first) {
+				for (auto name_stop : key.second)
+				{
+					if (name_stop == stop) {
+						buses.push_back(key.first);
+						break;
+					}
+				}
 				break;
 			}
 		}
 	}
+	//for (auto key : bus_stop) {
+	//	for (auto name_stop:key.second)
+	//	{
+	//		if (name_stop == stop) {
+	//			buses.push_back(key.first);
+	//			break;
+	//		}
+	//	}
+	//}
 	return buses;
 }
 
-void StopsForBus(const map<string, vector<string>>& bus_stop) {
+void StopsForBus(const map<string, vector<string>>& bus_stop, const vector<string>& bus_order) {
 	string bus;
 	cin >> bus;
 	bool exist = false;
@@ -40,7 +55,7 @@ void StopsForBus(const map<string, vector<string>>& bus_stop) {
 			exist = true;
 			for (auto name_stop : key.second) {
 				cout << "Stop " << name_stop << ": ";
-				vector<string> buses = busesForStop(bus_stop, name_stop);
+				vector<string> buses = busesForStop(bus_stop, name_stop, bus_order);
 				if (buses.size() > 0) {
 					for (auto all : buses) {
 						if (all != bus)
@@ -82,15 +97,16 @@ int main() {
 	int q;
 	cin >> q;
 	map<string, vector<string>> bus_stop; // first - маршрут second - вектор остановок
+	vector<string> bus_ORDER;
 	for (int i = 0; i < q; i++) {
 		string command;
 		cin >> command;
 		if (command == "NEW_BUS")
-			New_Bus(bus_stop);
+			New_Bus(bus_stop, bus_ORDER);
 		else if (command == "BUSES_FOR_STOP") {
 			string stop;
 			cin >> stop;
-			vector<string> buses = busesForStop(bus_stop, stop);
+			vector<string> buses = busesForStop(bus_stop, stop, bus_ORDER);
 			if (buses.size() > 0) {
 				for (auto all : buses) {
 					cout << all << ' ';
@@ -101,7 +117,7 @@ int main() {
 			cout << endl;
 		}
 		else if (command == "STOPS_FOR_BUS")
-			StopsForBus(bus_stop);
+			StopsForBus(bus_stop, bus_ORDER);
 		else if (command == "ALL_BUSES")
 			AllBuses(bus_stop);
 	}
