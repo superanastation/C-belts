@@ -33,15 +33,6 @@ vector<string> busesForStop(const map<string, vector<string>>& bus_stop, const s
 			}
 		}
 	}
-	//for (auto key : bus_stop) {
-	//	for (auto name_stop:key.second)
-	//	{
-	//		if (name_stop == stop) {
-	//			buses.push_back(key.first);
-	//			break;
-	//		}
-	//	}
-	//}
 	return buses;
 }
 
