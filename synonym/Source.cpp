@@ -5,24 +5,6 @@
 
 using namespace std;
 
-int count_syn(const map<string, set<string>>& dict, const string& word) {
-	//int num_syn = 0;
-	set<string> syn;
-	if (dict.count(word) != 0) {
-		syn.insert(begin(dict.at(word)), end(dict.at(word)));
-
-	}
-	//{
-	//	for (auto item : dict) {
-	//		if (item.second.count(word) != 0)
-	//			syn.insert(item.first);
-	//	}					
-	//}
-	
-	return syn.size();
-
-}
-
 bool check_syn(const map<string, set<string>>& dict) {
 	string word1, word2;
 	cin >> word1 >> word2;
@@ -31,14 +13,6 @@ bool check_syn(const map<string, set<string>>& dict) {
 			return true;
 
 	}
-	// после второго добавления, это можно убрать вроде
-	//if (dict.count(word2) != 0)
-	//{
-	//	if ((dict.at(word2)).count(word1) != 0)
-	//		return true;
-
-	//}
-
 	return false;
 }
 
@@ -58,8 +32,15 @@ int main() {
 		else if (command == "COUNT") {
 			string word;
 			cin >> word;
-			int num = count_syn(dict, word);
-			cout << num << endl;
+			if (dict.count(word)!=0)
+			{
+				cout << (dict.at(word)).size() << endl;
+			}
+			else
+			{
+				cout << 0 << endl;
+			}
+			
 		}
 		else if (command == "CHECK") {
 			bool res = check_syn(dict);
