@@ -12,12 +12,12 @@ int count_syn(const map<string, set<string>>& dict, const string& word) {
 		syn.insert(begin(dict.at(word)), end(dict.at(word)));
 
 	}
-	{
-		for (auto item : dict) {
-			if (item.second.count(word) != 0)
-				syn.insert(item.first);
-		}					
-	}
+	//{
+	//	for (auto item : dict) {
+	//		if (item.second.count(word) != 0)
+	//			syn.insert(item.first);
+	//	}					
+	//}
 	
 	return syn.size();
 
@@ -31,12 +31,13 @@ bool check_syn(const map<string, set<string>>& dict) {
 			return true;
 
 	}
-	if (dict.count(word2) != 0)
-	{
-		if ((dict.at(word2)).count(word1) != 0)
-			return true;
+	// после второго добавления, это можно убрать вроде
+	//if (dict.count(word2) != 0)
+	//{
+	//	if ((dict.at(word2)).count(word1) != 0)
+	//		return true;
 
-	}
+	//}
 
 	return false;
 }
@@ -52,6 +53,7 @@ int main() {
 			string word1,word2;
 			cin >> word1 >> word2;
 			dict[word1].insert(word2);
+			dict[word2].insert(word1);
 		}
 		else if (command == "COUNT") {
 			string word;
