@@ -6,31 +6,38 @@
 using namespace std;
 
 int count_syn(const map<string, set<string>>& dict, const string& word) {
-	int num_syn = 0;
-	for (auto item : dict) {
-		if (item.first == word) {
-			num_syn += item.second.size();
-		}
-		else if (item.second.count(word)!=0)
-			num_syn++;
+	//int num_syn = 0;
+	set<string> syn;
+	if (dict.count(word) != 0) {
+		syn.insert(begin(dict.at(word)), end(dict.at(word)));
+
 	}
-	return num_syn;
+	{
+		for (auto item : dict) {
+			if (item.second.count(word) != 0)
+				syn.insert(item.first);
+		}					
+	}
+	
+	return syn.size();
 
 }
 
 bool check_syn(const map<string, set<string>>& dict) {
 	string word1, word2;
 	cin >> word1 >> word2;
-	for (auto item : dict) {
-		if (item.first == word1) {
-			if (item.second.count(word2) != 0)
-				return true;
-		}
-		else if (item.first == word2) {
-			if (item.second.count(word1) != 0)
-				return true;
-		}
+	if (dict.count(word1) != 0) {
+		if ((dict.at(word1)).count(word2) != 0)
+			return true;
+
 	}
+	if (dict.count(word2) != 0)
+	{
+		if ((dict.at(word2)).count(word1) != 0)
+			return true;
+
+	}
+
 	return false;
 }
 
