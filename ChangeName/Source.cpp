@@ -1,108 +1,60 @@
-#include<string>
-#include<map>
-#include<iostream>
-
+#include <map>
+#include <string>
 using namespace std;
+// если имя неизвестно, возвращает пустую строку
+string FindNameByYear(const map<int, string>& names, int year) {
+	string name;  // изначально имя неизвестно
+
+	// перебираем всю историю по возрастанию ключа словаря, то есть в хронологическом порядке
+	for (const auto& item : names) {
+		// если очередной год не больше данного, обновляем имя
+		if (item.first <= year) {
+			name = item.second;
+		}
+		else {
+			// иначе пора остановиться, так как эта запись и все последующие относятся к будущему
+			break;
+		}
+	}
+
+	return name;
+}
 
 class Person {
 public:
 	void ChangeFirstName(int year, const string& first_name) {
-		story[year].first = first_name;
-		// добавить факт изменения имени на first_name в год year
+		first_names[year] = first_name;
 	}
 	void ChangeLastName(int year, const string& last_name) {
-		story[year].second = last_name;
-		// добавить факт изменения фамилии на last_name в год year
+		last_names[year] = last_name;
 	}
 	string GetFullName(int year) {
-		//story.count(begin(story), end(story));
-		if (story.size() > 0) {
-			string ans;
-			string first_name;
-			string last_name;
-			bool is_first_change = true;
-			int found_year;
-			for (const auto& change : story) {				
-				if (is_first_change) {
-					if (change.first>year)
-						return "Incognito";
-					else {
-						found_year = change.first;
-						is_first_change = false;
-					}
-				}					
-				else{
-					if (change.first <= year)
-						found_year = change.first;
-					else
-						break;
-				}
-			}
-			for (const auto& change : story) {
-				if (change.first > found_year)
-					break;
-				else {
-					if (change.second.first.size() != 0)
-						first_name = change.second.first;
-					if (change.second.second.size() != 0)
-						last_name = change.second.second;
-				}
-			}
-			if (first_name.size() == 0)
-				return last_name + " with unknown first name";
-			else if (last_name.size() == 0)
-				return first_name + " with unknown last name";
-			else
-				return first_name + ' ' + last_name;
+		// получаем имя и фамилию по состоянию на год year
+		const string first_name = FindNameByYear(first_names, year);
+		const string last_name = FindNameByYear(last_names, year);
 
-		}
-		else
+		// если и имя, и фамилия неизвестны
+		if (first_name.empty() && last_name.empty()) {
 			return "Incognito";
-		
 
+			// если неизвестно только имя
+		}
+		else if (first_name.empty()) {
+			return last_name + " with unknown first name";
 
+			// если неизвестна только фамилия
+		}
+		else if (last_name.empty()) {
+			return first_name + " with unknown last name";
 
-		//if (story.count(year) == 0) {
-		//	return "Incognito";
-		//}
-		//else if ((story[year]).first.size() == 0) {
-		//	return (story[year]).second + " with unknown first name";
-		//}
-		//else if ((story[year]).second.size() == 0) {
-		//	return  (story[year]).first + " with unknown last name";
-		//}
-		//else
-		//{
-		//	string ans = (story[year]).first + ' ' + (story[year]).second;
-		//	return ans;
-		//}
-		// получить имя и фамилию по состоянию на конец года year
+			// если известны и имя, и фамилия
+		}
+		else {
+			return first_name + " " + last_name;
+		}
 	}
+
 private:
-	map<int, pair<string, string>> story;
-	//vector<string> FirstName;
-	//vector<string> LastName;
-	//int year;
-	// приватные поля
+	map<int, string> first_names;
+	map<int, string> last_names;
 };
-
-int main() {
-	Person person;
-
-	person.ChangeFirstName(1965, "Polina");
-	person.ChangeLastName(1967, "Sergeeva");
-	for (int year : {1900, 1965, 1990}) {
-		cout << person.GetFullName(year) << endl;
-	}
-
-	person.ChangeFirstName(1970, "Appolinaria");
-	for (int year : {1969, 1970}) {
-		cout << person.GetFullName(year) << endl;
-	}
-
-	person.ChangeLastName(1968, "Volkova");
-	for (int year : {1969, 1970}) {
-		cout << person.GetFullName(year) << endl;
-	}
-	return 0;
-}
