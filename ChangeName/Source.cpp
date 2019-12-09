@@ -124,31 +124,33 @@ public:
 			return "Incognito";
 		string ans;
 		if (!current_name.empty()) {
-			ans = current_name; +" ";
+			ans = current_name;// +" ";
 			if (past_fn.size() != 0) {
-				ans += "(";
+				ans += " (";
 				for (int i = 0; i < past_fn.size()-1; i++) {
 					ans += (past_fn[i] + ", ");
 				}
-				ans += (past_fn[past_fn.size() - 1] + ") ");
+				ans += (past_fn[past_fn.size() - 1] + ")");
 			}
 		}
 			
 		if (!current_last.empty()) {
-			ans += current_last + " ";
+			if (!current_name.empty())
+				ans += " ";
+			ans += current_last;// +" ";
 			if (past_ln.size() != 0) {
-				ans += "(";
+				ans += " (";
 				for (int i = 0; i < past_ln.size()-1; i++) {
 					ans += (past_ln[i] + ", ");
 				}
-				ans += (past_ln[past_ln.size() - 1] + ") ");
+				ans += (past_ln[past_ln.size() - 1] + ")");
 			}
 		}
 		if (current_last.empty())
-			return ans + "with unknown last name";
+			return ans + " with unknown last name";
 		
 		if (current_name.empty())
-			return ans + "with unknown first name";
+			return ans + " with unknown first name";
 		return ans;
 		// получить все имена и фамилии по состоянию на конец года year
 	}
@@ -158,39 +160,39 @@ private:
 };
 
 
-//int main() {
-//	Person person;
-//
-//	person.ChangeFirstName(1965, "Polina");
-//	person.ChangeLastName(1967, "Sergeeva");
-//	for (int year : {1900, 1965, 1990}) {
-//		cout << person.GetFullNameWithHistory(year) << endl;
-//	}
-//
-//	person.ChangeFirstName(1970, "Appolinaria");
-//	for (int year : {1969, 1970}) {
-//		cout << person.GetFullNameWithHistory(year) << endl;
-//	}
-//
-//	person.ChangeLastName(1968, "Volkova");
-//	for (int year : {1969, 1970}) {
-//		cout << person.GetFullNameWithHistory(year) << endl;
-//	}
-//
-//	person.ChangeFirstName(1990, "Polina");
-//	person.ChangeLastName(1990, "Volkova-Sergeeva");
-//	cout << person.GetFullNameWithHistory(1990) << endl;
-//
-//	person.ChangeFirstName(1966, "Pauline");
-//	cout << person.GetFullNameWithHistory(1966) << endl;
-//
-//	person.ChangeLastName(1960, "Sergeeva");
-//	for (int year : {1960, 1967}) {
-//		cout << person.GetFullNameWithHistory(year) << endl;
-//	}
-//
-//	person.ChangeLastName(1961, "Ivanova");
-//	cout << person.GetFullNameWithHistory(1967) << endl;
-//
-//	return 0;
-//}
+int main() {
+	Person person;
+
+	person.ChangeFirstName(1965, "Polina");
+	person.ChangeLastName(1967, "Sergeeva");
+	for (int year : {1900, 1965, 1990}) {
+		cout << person.GetFullNameWithHistory(year) << endl;
+	}
+
+	person.ChangeFirstName(1970, "Appolinaria");
+	for (int year : {1969, 1970}) {
+		cout << person.GetFullNameWithHistory(year) << endl;
+	}
+
+	person.ChangeLastName(1968, "Volkova");
+	for (int year : {1969, 1970}) {
+		cout << person.GetFullNameWithHistory(year) << endl;
+	}
+
+	person.ChangeFirstName(1990, "Polina");
+	person.ChangeLastName(1990, "Volkova-Sergeeva");
+	cout << person.GetFullNameWithHistory(1990) << endl;
+
+	person.ChangeFirstName(1966, "Pauline");
+	cout << person.GetFullNameWithHistory(1966) << endl;
+
+	person.ChangeLastName(1960, "Sergeeva");
+	for (int year : {1960, 1967}) {
+		cout << person.GetFullNameWithHistory(year) << endl;
+	}
+
+	person.ChangeLastName(1961, "Ivanova");
+	cout << person.GetFullNameWithHistory(1967) << endl;
+
+	return 0;
+}
