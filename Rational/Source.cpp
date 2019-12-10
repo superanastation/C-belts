@@ -4,7 +4,15 @@
 #include <set>
 #include <vector>
 using namespace std;
-
+//while (a > 0 && b > 0) {
+//	if (a > b)
+//		a = a % b;
+//	else
+//	{
+//		b = b % a;
+//	}
+//}
+//cout << a + b;
 class Rational {
 public:
 	Rational() {
@@ -46,6 +54,7 @@ public:
 		return den;
 	}
 
+<<<<<<< HEAD
 	bool operator ==(const Rational& right) const{
 		return (this->num == right.num && this->den == right.den);
 	}
@@ -88,6 +97,8 @@ public:
 	//	stream << this->den;
 	//	return stream;
 	//}
+=======
+>>>>>>> parent of 76e4c36... = + -
 private:
 	int num;
 	int den;
@@ -109,23 +120,37 @@ ostream& operator << (ostream& str, const Rational& val) {
 }
 int main() {
 	{
+<<<<<<< HEAD
 		const set<Rational> rs = { {1, 2}, {1, 25}, {3, 4}, {3, 4}, {1, 2} };
 		if (rs.size() != 3) {
 			cout << "Wrong amount of items in the set" << endl;
+=======
+		const Rational r(3, 10);
+		if (r.Numerator() != 3 || r.Denominator() != 10) {
+			cout << "Rational(3, 10) != 3/10" << endl;
+>>>>>>> parent of 76e4c36... = + -
 			return 1;
 		}
 
+<<<<<<< HEAD
 		vector<Rational> v;
 		for (auto x : rs) {
 			v.push_back(x);
 		}
 		if (v != vector<Rational>{ {1, 25}, { 1, 2 }, { 3, 4 }}) {
 			cout << "Rationals comparison works incorrectly" << endl;
+=======
+	{
+		const Rational r(8, 12);
+		if (r.Numerator() != 2 || r.Denominator() != 3) {
+			cout << "Rational(8, 12) != 2/3" << endl;
+>>>>>>> parent of 76e4c36... = + -
 			return 2;
 		}
 	}
 
 	{
+<<<<<<< HEAD
 		map<Rational, int> count;
 		++count[{1, 2}];
 		++count[{1, 2}];
@@ -134,7 +159,36 @@ int main() {
 
 		if (count.size() != 2) {
 			cout << "Wrong amount of items in the map" << endl;
+=======
+		const Rational r(-4, 6);
+		if (r.Numerator() != -2 || r.Denominator() != 3) {
+			cout << "Rational(-4, 6) != -2/3" << endl;
 			return 3;
+		}
+	}
+
+	{
+		const Rational r(4, -6);
+		if (r.Numerator() != -2 || r.Denominator() != 3) {
+			cout << "Rational(4, -6) != -2/3" << endl;
+>>>>>>> parent of 76e4c36... = + -
+			return 3;
+		}
+	}
+
+	{
+		const Rational r(0, 15);
+		if (r.Numerator() != 0 || r.Denominator() != 1) {
+			cout << "Rational(0, 15) != 0/1" << endl;
+			return 4;
+		}
+	}
+
+	{
+		const Rational defaultConstructed;
+		if (defaultConstructed.Numerator() != 0 || defaultConstructed.Denominator() != 1) {
+			cout << "Rational() != 0/1" << endl;
+			return 5;
 		}
 	}
 
