@@ -55,7 +55,16 @@ public:
 		int new_den = this->den*right.den;
 		return Rational(new_num, new_den);
 	}
-
+	Rational operator *(const Rational& right) const {
+		int new_num = this->num*right.num;
+		int new_den = this->den*right.den;
+		return Rational(new_num, new_den);
+	}
+	Rational operator /(const Rational& right) const {
+		int new_num = this->num*right.den;
+		int new_den = this->den*right.num;
+		return Rational(new_num, new_den);
+	}
 private:
 	int num;
 	int den;
@@ -63,34 +72,24 @@ private:
 
 int main() {
 	{
-		Rational r1(4, 6);
-		Rational r2(2, 3);
-		bool equal = r1 == r2;
+		Rational a(2, 3);
+		Rational b(4, 3);
+		Rational c = a * b;
+		bool equal = c == Rational(8, 9);
 		if (!equal) {
-			cout << "4/6 != 2/3" << endl;
+			cout << "2/3 * 4/3 != 8/9" << endl;
 			return 1;
 		}
 	}
 
 	{
-		Rational a(2, 3);
-		Rational b(4, 3);
-		Rational c = a + b;
-		bool equal = c == Rational(2, 1);
+		Rational a(5, 4);
+		Rational b(15, 8);
+		Rational c = a / b;
+		bool equal = c == Rational(2, 3);
 		if (!equal) {
-			cout << "2/3 + 4/3 != 2" << endl;
+			cout << "5/4 / 15/8 != 2/3" << endl;
 			return 2;
-		}
-	}
-
-	{
-		Rational a(5, 7);
-		Rational b(2, 9);
-		Rational c = a - b;
-		bool equal = c == Rational(31, 63);
-		if (!equal) {
-			cout << "5/7 - 2/9 != 31/63" << endl;
-			return 3;
 		}
 	}
 
