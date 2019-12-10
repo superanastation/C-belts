@@ -2,12 +2,11 @@
 #include <map>
 #include <vector>
 #include <string>
-#include<iostream>
 
 using namespace std;
 
 vector<string> FindNamesHistory(const map<int, string>& names_by_year,
-	int year){
+	int year) {
 	vector<string> names;
 	// перебираем всю историю в хронологическом порядке
 	for (const auto& item : names_by_year) {
@@ -71,27 +70,16 @@ string BuildFullName(const string& first_name, const string& last_name) {
 
 class Person {
 public:
-	Person(){}
-	Person(const string& firstname, const string& secondname, const int& year) {
-		ChangeFirstName(year,firstname);
-		ChangeLastName(year,secondname);
-		year_of_birth = year;
-	}
 	void ChangeFirstName(int year, const string& first_name) {
-		if (year >= year_of_birth) 
-			first_names[year] = first_name;
+		first_names[year] = first_name;
 	}
 	void ChangeLastName(int year, const string& last_name) {
-		if (year >= year_of_birth)
-			last_names[year] = last_name;
+		last_names[year] = last_name;
 	}
 
-	string GetFullName(int year) const {
+	string GetFullName(int year) {
 		// найдём историю изменений имени и фамилии
 		// в данном случае это излишне, так как нам достаточно узнать последние имя и фамилию, но почему бы не использовать готовые функции?
-		if (year < year_of_birth) {
-			return "No person";
-		}
 		const vector<string> first_names_history = FindFirstNamesHistory(year);
 		const vector<string> last_names_history = FindLastNamesHistory(year);
 
@@ -107,10 +95,7 @@ public:
 		return BuildFullName(first_name, last_name);
 	}
 
-	string GetFullNameWithHistory(int year)  const {
-		if (year < year_of_birth) {
-			return "No person";
-		}
+	string GetFullNameWithHistory(int year) {
 		// получим полное имя со всей историей
 		const string first_name = BuildJoinedName(FindFirstNamesHistory(year));
 		// получим полную фамилию со всей историей
@@ -120,29 +105,13 @@ public:
 	}
 
 private:
-	vector<string> FindFirstNamesHistory(int year)  const {
+	vector<string> FindFirstNamesHistory(int year) {
 		return FindNamesHistory(first_names, year);
 	}
-	vector<string> FindLastNamesHistory(int year)  const {
+	vector<string> FindLastNamesHistory(int year) {
 		return FindNamesHistory(last_names, year);
 	}
 
 	map<int, string> first_names;
 	map<int, string> last_names;
-	int year_of_birth;
 };
-
-int main() {
-	Person person("Polina", "Sergeeva", 1960);
-	for (int year : {1959, 1960}) {
-		cout << person.GetFullNameWithHistory(year) << endl;
-	}
-
-	person.ChangeFirstName(1965, "Appolinaria");
-	person.ChangeLastName(1967, "Ivanova");
-	for (int year : {1965, 1967}) {
-		cout << person.GetFullNameWithHistory(year) << endl;
-	}
-
-	return 0;
-}
