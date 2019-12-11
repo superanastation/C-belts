@@ -3,16 +3,8 @@
 #include <map>
 #include <set>
 #include <vector>
+#include<cmath>
 using namespace std;
-//while (a > 0 && b > 0) {
-//	if (a > b)
-//		a = a % b;
-//	else
-//	{
-//		b = b % a;
-//	}
-//}
-//cout << a + b;
 class Rational {
 public:
 	Rational() {
@@ -26,8 +18,8 @@ public:
 			den = 1;
 		}
 		else {
-			int a = numerator;
-			int b = denominator;
+			int a = abs(numerator);
+			int b = abs(denominator);
 			while (a > 0 && b > 0) {
 				if (a > b)
 					a = a % b;
@@ -54,7 +46,6 @@ public:
 		return den;
 	}
 
-<<<<<<< HEAD
 	bool operator ==(const Rational& right) const{
 		return (this->num == right.num && this->den == right.den);
 	}
@@ -85,7 +76,7 @@ public:
 			return this->num*right.den < this->den*right.num;
 		}
 	}
-	//istringstream& operator >>(istringstream& stream,Rational& new_r) {
+	////istringstream& operator >>(istringstream& stream,Rational& new_r) {
 	//	stream >> this->num;
 	//	stream.ignore(1);
 	//	stream >> this->den;
@@ -97,8 +88,7 @@ public:
 	//	stream << this->den;
 	//	return stream;
 	//}
-=======
->>>>>>> parent of 76e4c36... = + -
+
 private:
 	int num;
 	int den;
@@ -106,11 +96,15 @@ private:
 istream& operator >>(istream& stream, Rational& new_r) {
 	int num, den;
 	char check;
-	stream >> num;
-	stream >> check;
-	stream >> den;
-	if (check=='/')
-		new_r = Rational(num,den);
+	if (stream.tellg()!=-1) {
+		stream >> num;
+		stream >> check;
+		stream >> den;
+		if (check == '/')
+			new_r = Rational(num, den);
+	}
+	
+
 	return stream;
 }
 ostream& operator << (ostream& str, const Rational& val) {
@@ -119,38 +113,25 @@ ostream& operator << (ostream& str, const Rational& val) {
 	return str;
 }
 int main() {
+
 	{
-<<<<<<< HEAD
 		const set<Rational> rs = { {1, 2}, {1, 25}, {3, 4}, {3, 4}, {1, 2} };
 		if (rs.size() != 3) {
 			cout << "Wrong amount of items in the set" << endl;
-=======
-		const Rational r(3, 10);
-		if (r.Numerator() != 3 || r.Denominator() != 10) {
-			cout << "Rational(3, 10) != 3/10" << endl;
->>>>>>> parent of 76e4c36... = + -
 			return 1;
 		}
 
-<<<<<<< HEAD
 		vector<Rational> v;
 		for (auto x : rs) {
 			v.push_back(x);
 		}
 		if (v != vector<Rational>{ {1, 25}, { 1, 2 }, { 3, 4 }}) {
 			cout << "Rationals comparison works incorrectly" << endl;
-=======
-	{
-		const Rational r(8, 12);
-		if (r.Numerator() != 2 || r.Denominator() != 3) {
-			cout << "Rational(8, 12) != 2/3" << endl;
->>>>>>> parent of 76e4c36... = + -
 			return 2;
 		}
 	}
 
 	{
-<<<<<<< HEAD
 		map<Rational, int> count;
 		++count[{1, 2}];
 		++count[{1, 2}];
@@ -159,38 +140,10 @@ int main() {
 
 		if (count.size() != 2) {
 			cout << "Wrong amount of items in the map" << endl;
-=======
-		const Rational r(-4, 6);
-		if (r.Numerator() != -2 || r.Denominator() != 3) {
-			cout << "Rational(-4, 6) != -2/3" << endl;
 			return 3;
 		}
 	}
 
-	{
-		const Rational r(4, -6);
-		if (r.Numerator() != -2 || r.Denominator() != 3) {
-			cout << "Rational(4, -6) != -2/3" << endl;
->>>>>>> parent of 76e4c36... = + -
-			return 3;
-		}
-	}
-
-	{
-		const Rational r(0, 15);
-		if (r.Numerator() != 0 || r.Denominator() != 1) {
-			cout << "Rational(0, 15) != 0/1" << endl;
-			return 4;
-		}
-	}
-
-	{
-		const Rational defaultConstructed;
-		if (defaultConstructed.Numerator() != 0 || defaultConstructed.Denominator() != 1) {
-			cout << "Rational() != 0/1" << endl;
-			return 5;
-		}
-	}
 
 	cout << "OK" << endl;
 	return 0;
