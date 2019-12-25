@@ -13,7 +13,10 @@ public:
 	}
 
 	Rational(int numerator, int denominator) {
-		if (numerator == 0 || denominator==0) {
+		if (denominator == 0) {
+			throw invalid_argument("Invalid argument");//runtime_error()
+		}
+		else if (numerator == 0 ) {
 			num = numerator;
 			den = 1;
 		}
@@ -65,6 +68,9 @@ public:
 		return Rational(new_num, new_den);
 	}
 	Rational operator /(const Rational& right) const {
+		if (right.Numerator() == 0) {
+			throw domain_error("Division by zero");
+		}
 		int new_num = this->num*right.den;
 		int new_den = this->den*right.num;
 		return Rational(new_num, new_den);
@@ -76,18 +82,6 @@ public:
 			return this->num*right.den < this->den*right.num;
 		}
 	}
-	////istringstream& operator >>(istringstream& stream,Rational& new_r) {
-	//	stream >> this->num;
-	//	stream.ignore(1);
-	//	stream >> this->den;
-	//	return stream;
-	//}
-	//ostringstream& operator <<(ostringstream& stream) {
-	//	stream << this->num;
-	//	stream << '/';
-	//	stream << this->den;
-	//	return stream;
-	//}
 
 private:
 	int num;
@@ -95,7 +89,7 @@ private:
 };
 istream& operator >>(istream& stream, Rational& new_r) {
 	int num, den;
-	char check;
+	char check,op;
 	if (stream.tellg()!=-1) {
 		stream >> num;
 		stream >> check;
@@ -109,42 +103,39 @@ istream& operator >>(istream& stream, Rational& new_r) {
 }
 ostream& operator << (ostream& str, const Rational& val) {
 	str << val.Numerator() << '/' << val.Denominator();
-	//cout << val.p << '/' << val.q << endl;
 	return str;
 }
+void run(const string& input_str) {
+	Rational temp1, temp2;
+	char op;
+	istringstream input(input_str);
+	input >> temp1 >> op >> temp2;
+	if (op == '+') {
+		Rational res = temp1 + temp2;
+		cout << res;
+	}
+	else if (op == '-') {
+		Rational res = temp1 - temp2;
+		cout << res;
+	}
+	else if (op == '*') {
+		Rational res = temp1 * temp2;
+		cout << res;
+	}
+	else if (op == '/') {
+		Rational res = temp1 / temp2;
+		cout << res;
+	}
+}
 int main() {
-
-	{
-		const set<Rational> rs = { {1, 2}, {1, 25}, {3, 4}, {3, 4}, {1, 2} };
-		if (rs.size() != 3) {
-			cout << "Wrong amount of items in the set" << endl;
-			return 1;
-		}
-
-		vector<Rational> v;
-		for (auto x : rs) {
-			v.push_back(x);
-		}
-		if (v != vector<Rational>{ {1, 25}, { 1, 2 }, { 3, 4 }}) {
-			cout << "Rationals comparison works incorrectly" << endl;
-			return 2;
-		}
+	try {
+		string in_r1,in_op,in_r2;
+		cin >> in_r1>>in_op>>in_r2;
+		run(in_r1+" "+in_op + " " + in_r2);
 	}
-
-	{
-		map<Rational, int> count;
-		++count[{1, 2}];
-		++count[{1, 2}];
-
-		++count[{2, 3}];
-
-		if (count.size() != 2) {
-			cout << "Wrong amount of items in the map" << endl;
-			return 3;
-		}
+	catch (exception& ex) {
+		cout << ex.what();
 	}
-
-
-	cout << "OK" << endl;
+	
 	return 0;
 }
