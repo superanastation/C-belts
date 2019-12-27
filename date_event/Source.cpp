@@ -94,26 +94,73 @@ private:
 	map<Date, set<string>> base;
 };
 Date is_format(const string& date) {
+	int count = 0;
+	//for (const auto& item : date) {
+	//	if (!isdigit(item) && item != '-' && item != '+') {
+	//		string mistake = "Wrong date format: " + date;
+	//		throw runtime_error(mistake);
+	//	}
+	//	else if (item == '-' && count <= 5){
+	//		count++;
+	//	}
+	//	if (count > 5) {
+	//		string mistake = "Wrong date format: " + date;
+	//		throw runtime_error(mistake);
+	//	}
+	//}
 	istringstream iss(date);
 	int year, month, day;
-	char def1,def2;
-	if (!isdigit(iss.peek()) && iss.peek() != '-') {
+	//char def1,def2;
+	if (!isdigit(iss.peek()) && iss.peek() != '-' && iss.peek() != '+') {
 		string mistake = "Wrong date format: " + date;
 		throw runtime_error(mistake);
 	}
-	iss >> year >> def1 >> month >> def2 >> day;
-	if (iss.peek() != EOF) {
-		string mistake = "Wrong date format: " + date;
-		throw runtime_error(mistake);
-	}
-	int count = 0;
-	for (const auto& item : date) {
-		if (!isdigit(item) && item != '-') {
+	iss >> year;// >> def1;
+	int one = 1;
+	if (iss.peek() == '-') {
+		iss.ignore(1);
+		if (iss.peek() == '-' || iss.peek() == '+')
+		{
+			if (iss.peek()=='-')
+				one = -1;
+			iss.ignore(1);
+		}
+		if (!isdigit(iss.peek())) {
 			string mistake = "Wrong date format: " + date;
 			throw runtime_error(mistake);
 		}
 	}
-	if (def1 != '-' || def2 != '-' || year>9999) {
+	else {
+		string mistake = "Wrong date format: " + date;
+		throw runtime_error(mistake);
+	}
+	iss >> month;
+	month *= one;
+	one = 1;
+	if (iss.peek() == '-') {
+		iss.ignore(1);
+		if (iss.peek() == '-' || iss.peek() == '+')
+		{
+			if (iss.peek() == '-')
+				one = -1;
+			iss.ignore(1);
+		}
+		if (!isdigit(iss.peek())) {
+			string mistake = "Wrong date format: " + date;
+			throw runtime_error(mistake);
+		}
+	}
+	else {
+		string mistake = "Wrong date format: " + date;
+		throw runtime_error(mistake);
+	}
+	iss>>day;
+	day *= one;
+	if (iss.peek() != EOF) {
+		string mistake = "Wrong date format: " + date;
+		throw runtime_error(mistake);
+	}	
+	if (year>9999) {
 		string mistake = "Wrong date format: " + date;
 		throw runtime_error(mistake);
 	}
