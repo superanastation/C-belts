@@ -1,2 +1,2 @@
-# C-white
-coursera white belt
+# C++
+coursera yandex belts
