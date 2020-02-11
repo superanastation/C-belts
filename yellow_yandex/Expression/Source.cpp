@@ -1,8 +1,6 @@
 #include<iostream>
 #include<string>
 #include<deque>
-#include<stack>
-#include<sstream>
 
 using namespace std;
 
@@ -17,43 +15,32 @@ int main() {
 	cin >> num;
 	int N;
 	cin >> N;
-	stack<PartExp> deq;
+	deque<string> deq_str;
 
 	if (N > 0)
 	{
-		char pre_op = '*';
+		string pre_op = "*";// '*';
+		deq_str.push_back(to_string(num));
 		for (int i = 0; i < N; i++) {
-			char op;
+			string op;
 			int r_num;
 			cin >> op >> r_num;
-			if ((pre_op == '+' || pre_op == '-') && (op == '*' || op == '/'))
+			if ((pre_op == "+" || pre_op == "-") && (op == "*" || op == "/"))
 			{
-				out = "(" + out + ")" + " " + op + " " + to_string(r_num);
+				deq_str.push_front("(");
+				deq_str.push_back(")");
 			}
-			else
-				out = out + " " + op + " " + to_string(r_num);
+			deq_str.push_back(" ");
+			deq_str.push_back(op);
+			deq_str.push_back(" ");
+			deq_str.push_back(to_string(r_num));
+
 			pre_op = op;
 		}
-		//ostringstream s_out;
-		//auto it = deq.top();
-		//bool pre_priority = false;
-		//for (int i = 0; i < N; i++) {
-		//	auto last = deq.top();
-		//	deq.pop();
-		//	auto pre_last = deq.top();
-		//	if ((pre_last.operation == '+' || pre_last.operation == '-') && (last.operation == '*' || last.operation == '/'))
-		//	{
-
-		//	}
-		//}
-		/*for (int i = 0; i < N; i++) {
-			cout << "(";
+		for (const auto& item : deq_str)
+		{
+			cout << item;
 		}
-		cout << to_string(num) << ") ";
-		for (int i = 0; i < N - 1; i++) {
-			cout << deq.at(i).operation << " " << to_string(deq.at(i).number) << ") ";
-		}
-		cout << deq.at(N - 1).operation << " " << to_string(deq.at(N - 1).number);*/
 	}
 	else {
 		out = to_string(num);
