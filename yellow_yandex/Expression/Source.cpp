@@ -21,25 +21,31 @@ int main() {
 
 	if (N > 0)
 	{
+		char pre_op = '*';
 		for (int i = 0; i < N; i++) {
 			char op;
 			int r_num;
 			cin >> op >> r_num;
-			PartExp in = { op,r_num };
-			deq.push(in);
-		}
-		ostringstream s_out;
-		auto it = deq.top();
-		bool pre_priority = false;
-		for (int i = 0; i < N; i++) {
-			auto last = deq.top();
-			deq.pop();
-			auto pre_last = deq.top();
-			if ((pre_last.operation == '+' || pre_last.operation == '-') && (last.operation == '*' || last.operation == '/'))
+			if ((pre_op == '+' || pre_op == '-') && (op == '*' || op == '/'))
 			{
-
+				out = "(" + out + ")" + " " + op + " " + to_string(r_num);
 			}
+			else
+				out = out + " " + op + " " + to_string(r_num);
+			pre_op = op;
 		}
+		//ostringstream s_out;
+		//auto it = deq.top();
+		//bool pre_priority = false;
+		//for (int i = 0; i < N; i++) {
+		//	auto last = deq.top();
+		//	deq.pop();
+		//	auto pre_last = deq.top();
+		//	if ((pre_last.operation == '+' || pre_last.operation == '-') && (last.operation == '*' || last.operation == '/'))
+		//	{
+
+		//	}
+		//}
 		/*for (int i = 0; i < N; i++) {
 			cout << "(";
 		}
