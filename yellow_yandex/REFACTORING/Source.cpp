@@ -11,16 +11,16 @@ public:
 	Human(const string& name,const string& profi) : 
 		Name(name),Profession(profi){}
 
-	string getName() {
+	string getName() const {
 		return Name;
 	}
 
-	string getProfession()
+	string getProfession() const
 	{
 		return Profession;
 	}
 
-	void Do(deque<string>& do_smth) {
+	void Do(deque<string>& do_smth) const {
 		do_smth.push_front(" ");
 		do_smth.push_front(Name);
 		do_smth.push_front(": ");
@@ -41,7 +41,6 @@ public:
 
 	virtual void Check(shared_ptr<Human> h) {}
 
-protected:
 	const string Name;
 	const string Profession;
 };
@@ -52,7 +51,7 @@ public:
 	Student(const string& name,const string& favouriteSong): 
 		Human(name,"Student"), FavouriteSong(favouriteSong) {}
 
-	void Learn() {
+	void Learn() const {
 		deque<string> do_smth;
 		do_smth.push_back(" learns");
 		Do(do_smth);
@@ -67,14 +66,13 @@ public:
 		SingSong();
 	}
 
-	void SingSong() {
+	void SingSong() const {
 		deque<string> do_smth;
 		do_smth.push_back(" sings a song: ");
 		do_smth.push_back(FavouriteSong);
 		Do(do_smth);
 	}
 
-protected:
 	const string FavouriteSong;
 };
 
@@ -85,15 +83,14 @@ public:
 	Teacher(const string& name,const string& subject): 
 		Human(name,"Teacher"),Subject(subject) {}
 
-	void Teach() {
+	void Teach() const {
 		deque<string> do_smth;
 		do_smth.push_back(" teaches: ");
 		do_smth.push_back(Subject);
 		Do(do_smth);
 	}
 
-protected:
-	string Subject;
+	const string Subject;
 };
 
 
