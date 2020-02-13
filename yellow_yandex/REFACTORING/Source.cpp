@@ -32,7 +32,7 @@ public:
 		cout << endl;
 	}
 
-	virtual void Walk(string destination) {
+	virtual void Walk(string destination) const {
 		deque<string> do_smth;
 		do_smth.push_back(" walks to: ");
 		do_smth.push_back(destination);
@@ -40,6 +40,8 @@ public:
 	}
 
 	virtual void Check(shared_ptr<Human> h) {}
+
+protected:
 
 	const string Name;
 	const string Profession;
@@ -57,7 +59,7 @@ public:
 		Do(do_smth);
 	}
 
-	void Walk(string destination) override
+	void Walk(string destination) const override
 	{
 		deque<string> do_smth;
 		do_smth.push_back(" walks to: ");
@@ -73,6 +75,7 @@ public:
 		Do(do_smth);
 	}
 
+protected:
 	const string FavouriteSong;
 };
 
@@ -90,6 +93,7 @@ public:
 		Do(do_smth);
 	}
 
+protected:
 	const string Subject;
 };
 
