@@ -20,6 +20,7 @@ public:
 		return Profession;
 	}
 
+	// сделано через deq, чтобы избежать сложени€ строк и работать с потоком вывода только в одной функции
 	void Do(deque<string>& do_smth) const {
 		do_smth.push_front(" ");
 		do_smth.push_front(Name);
@@ -32,14 +33,14 @@ public:
 		cout << endl;
 	}
 
-	virtual void Walk(string destination) const {
+	virtual void Walk(const string& destination) const {
 		deque<string> do_smth;
 		do_smth.push_back(" walks to: ");
 		do_smth.push_back(destination);
 		Do(do_smth);
 	}
 
-	virtual void Check(shared_ptr<Human> h) {}
+	virtual void Check(shared_ptr<Human> h) const{}
 
 protected:
 
@@ -59,7 +60,7 @@ public:
 		Do(do_smth);
 	}
 
-	void Walk(string destination) const override
+	void Walk(const string& destination) const override
 	{
 		deque<string> do_smth;
 		do_smth.push_back(" walks to: ");
@@ -75,7 +76,6 @@ public:
 		Do(do_smth);
 	}
 
-protected:
 	const string FavouriteSong;
 };
 
@@ -93,7 +93,6 @@ public:
 		Do(do_smth);
 	}
 
-protected:
 	const string Subject;
 };
 
@@ -103,7 +102,7 @@ public:
 	Policeman(const string& name) :
 		Human(name, "Policeman") {}
 
-	void Check(shared_ptr<Human> h) override
+	void Check(shared_ptr<Human> h) const override
 	{
 		deque<string> do_smth;
 		do_smth.push_back(" checks ");
@@ -120,7 +119,7 @@ public:
 
 void VisitPlaces(shared_ptr<Human> h, vector<string> places) {
 	for (auto p : places) {
-		(*h).Walk(p);
+		h->Walk(p);
 	}
 }
 
@@ -136,7 +135,7 @@ int main() {
 	t = make_shared<Teacher>("Jim", "Math");
 
 	VisitPlaces(t, { "Moscow", "London" });
-	(*p).Check(s);
+	p->Check(s);
 	VisitPlaces(s, { "Moscow", "London" });
 	return 0;
 }

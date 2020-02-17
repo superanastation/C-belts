@@ -29,7 +29,7 @@ template <class It> shared_ptr<Node> ParseComparison(It& current, It end) {
 		throw logic_error("Expected right value of comparison");
 	}
 
-	Comparison cmp;
+	Comparison cmp;	
 	if (op.value == "<") {
 		cmp = Comparison::Less;
 	}
