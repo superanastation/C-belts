@@ -1,7 +1,5 @@
 #include"node.h"
 
-string Node::GetTypeNode() { return type_; }
-
 bool EmptyNode::Evaluate(const Date& date, const string& event)
 {
 	return true;

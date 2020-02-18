@@ -16,10 +16,6 @@ public:
 
 	string Last(Date date);
 
-	//map<Date, set<string>> DateComparison(const DateComparisonNode& node);
-
-	//map<Date, set<string>> EventComparison(const EventComparisonNode& node);
-
 	template <typename T> map<Date, unordered_set<string>> FindIf(T& func)
 	{
 		map<Date, unordered_set<string>> res;
@@ -32,24 +28,9 @@ public:
 			}
 		}
 		return res;
-		//string type = condition->GetTypeNode();
-		//if (type == "LogicalOperationNode") {
-		//	shared_ptr<Node> condition->GetLeft();
-		//	// тут надо что-то возможно рекурсивное придумать.
-		//}
-		//else
-		//	if (type == "DateComparisonNode")
-		//	{
-		//		// return с соответствующей функцией
-		//	}
-		//	else
-		//		if (type == "EventComparisonNode")
-		//		{
-		//			// return с соответствующей функцией
-		//		}
 	}
 
-	template <typename T> int RemoveIf(T& func)		//	argument???
+	template <typename T> int RemoveIf(T& func)		
 	{
 		int res=0;
 
@@ -74,11 +55,4 @@ protected:
 	map<Date, unordered_set<string>> base;
 };
 
-ostream& operator << (ostream& os, const pair<const Date, unordered_set<string>>& d_e)
-{
-	for (const auto& item : d_e.second)
-	{
-		os << d_e.first << " " << item;
-	}
-	return os;
-}
+ostream& operator << (ostream& os, const pair<const Date, unordered_set<string>>& d_e);

@@ -7,6 +7,7 @@
 #include <string>
 #include <map>
 #include <set>
+#include <vector>
 
 using namespace std;
 
@@ -47,6 +48,20 @@ void AssertEqual(const T& t, const U& u,
 
 inline void Assert(bool b, const string& hint) {
 	AssertEqual(b, true, hint);
+}
+
+template <class A>
+ostream& operator << (ostream& os, const vector<A>& s) {
+	os << "{";
+	bool first = true;
+	for (const auto& x : s) {
+		if (!first) {
+			os << ", ";
+		}
+		first = false;
+		os << x;
+	}
+	return os << "}";
 }
 
 template <class T>

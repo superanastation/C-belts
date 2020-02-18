@@ -1,27 +1,30 @@
 #pragma once
 #include"date.h"
-#include"condition_parser.h"
+//#include"condition_parser.h"
 
-//вместо string типа можно попробовать сделать enum 
+enum class Comparison {
+	Less,
+	LessOrEqual,
+	Greater,
+	GreaterOrEqual,
+	Equal,
+	NotEqual,
+};
+
+enum class LogicalOperation {
+	Or,
+	And,
+};
 
 class Node {
 public:
-
-	Node(string type) : type_(type){}
-
-	string GetTypeNode();
-
+	Node() {};
 	virtual bool Evaluate(const Date& date, const string& event)=0;	// судя по всему проверка соответствует ли данное событие данной дате. откуда только доступ к базе непонятно
-
-protected:
-	string type_;
 };
 
 class EmptyNode :public Node
 {
 public:
-	EmptyNode() :
-		Node("EmptyNode"){}
 
 	bool Evaluate(const Date& date, const string& event) override;
 };
@@ -30,14 +33,8 @@ class LogicalOperationNode : public Node
 {
 public:
 
-	LogicalOperationNode(LogicalOperation l_op, shared_ptr<Node> node_left, shared_ptr<Node> node_right):
-		Node("LogicalOperationNode"),l_op_(l_op),node_left_(node_left),node_right_(node_right){}
-
-	//shared_ptr<Node> GetLeft();
-
-	//shared_ptr<Node> GetRight();
-
-	//LogicalOperation GetOp();
+	LogicalOperationNode(const LogicalOperation& l_op,const shared_ptr<Node>& node_left,const shared_ptr<Node>& node_right):
+		l_op_(l_op),node_left_(node_left),node_right_(node_right){}
 
 	bool Evaluate(const Date& date, const string& event) override;
 
@@ -52,8 +49,8 @@ class DateComparisonNode : public Node
 {
 public:
 
-	DateComparisonNode(Comparison cmp, Date date):
-		Node("DateComparisonNode"), cmp_(cmp), date_(date){}
+	DateComparisonNode(const Comparison& cmp, const Date& date):
+		cmp_(cmp), date_(date){}
 
 	// сравнивает входные данные с помощью cmp с date_
 	bool Evaluate(const Date& date, const string& event) override;
@@ -67,8 +64,8 @@ class EventComparisonNode : public Node
 {
 public:
 
-	EventComparisonNode(Comparison cmp, string event):
-		Node("EventComparisonNode"), cmp_(cmp), event_(event){}
+	EventComparisonNode(const Comparison& cmp,const string& event):
+		cmp_(cmp), event_(event){}
 
 	// сравнивает входные данные с помощью cmp с event
 	bool Evaluate(const Date& date, const string& event) override;

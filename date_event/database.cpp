@@ -27,3 +27,12 @@ string Database::Last(Date date)
 		return *(it->second.end()--);
 	}
 }
+
+ostream& operator << (ostream& os, const pair<const Date, unordered_set<string>>& d_e)
+{
+	for (const auto& item : d_e.second)
+	{
+		os << d_e.first << " " << item;
+	}
+	return os;
+}

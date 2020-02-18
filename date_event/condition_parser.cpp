@@ -4,6 +4,29 @@
 #include <map>
 using namespace std;
 
+string ParseEvent(istream& is) {
+	// по идее я должна знать как считать все символы кроме пробелов в начале
+	string res;
+	char c;
+	//bool first = true;
+	if (is.peek() == ' ')
+	{
+		while (is.peek()== ' ') {
+			is.ignore(1);
+		}
+	}
+	
+	getline(is, res);
+	return res;
+}
+
+Date ParseDate(istringstream& iss) {
+	int year, month, day;
+	char def1, def2;
+	iss >> year >> def1 >> month >> def2 >> day;
+	return Date(year, month, day);
+}
+
 template <class It> shared_ptr<Node> ParseComparison(It& current, It end) {
 	if (current == end) {
 		throw logic_error("Expected column name: date or event");

@@ -1,5 +1,5 @@
 #include "database.h"
-#include "date.h"
+//#include "date.h"
 #include "condition_parser.h"
 #include "node.h"
 #include "/cpp_learning/github/yellow_yandex/unit-test_framework/test_runner.h"
@@ -12,18 +12,7 @@
 
 using namespace std;
 
-string ParseEvent(istream& is) {
-	string res;
-	getline(is, res);
-	return res;
-}
 
-Date ParseDate(istringstream& iss) {
-	int year, month, day;
-	char def1, def2;
-	iss >> year >> def1 >> month >> def2 >> day;	
-	return Date(year, month, day);
-}
 void TestAll();
 
 int main() {
