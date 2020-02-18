@@ -46,3 +46,30 @@ bool operator<(const Date& lhs, const Date& rhs) {
 	else
 		return lhs.GetDay() < rhs.GetDay();
 }
+
+bool operator==(const Date& lhs, const Date& rhs) {
+	if (lhs.GetYear() == rhs.GetYear())
+	{
+		if (lhs.GetMonth() == rhs.GetMonth())
+		{
+			return lhs.GetDay() == rhs.GetDay();
+		}
+	}
+	return false;
+}
+
+bool operator>(const Date& lhs, const Date& rhs) {
+	return !(lhs < rhs) && !(lhs == rhs);
+}
+
+bool operator>=(const Date& lhs, const Date& rhs) {
+	return !(lhs < rhs);
+}
+
+bool operator<=(const Date& lhs, const Date& rhs) {
+	return (lhs < rhs) || (lhs == rhs);
+}
+
+bool operator!=(const Date& lhs, const Date& rhs) {
+	return !(lhs == rhs);
+}
