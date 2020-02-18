@@ -5,6 +5,9 @@ bool EmptyNode::Evaluate(const Date& date, const string& event)
 	return true;
 }
 
+LogicalOperationNode::LogicalOperationNode(const LogicalOperation& l_op, const shared_ptr<Node>& node_left, const shared_ptr<Node>& node_right) :
+	l_op_(l_op), node_left_(node_left), node_right_(node_right) {}
+
 bool LogicalOperationNode::Evaluate(const Date& date, const string& event)
 {
 	bool res_left=node_left_->Evaluate(date, event);
@@ -14,6 +17,9 @@ bool LogicalOperationNode::Evaluate(const Date& date, const string& event)
 	else
 		return res_left || res_right;
 }
+
+DateComparisonNode::DateComparisonNode(const Comparison& cmp, const Date& date) :
+	cmp_(cmp), date_(date) {}
 
 bool DateComparisonNode::Evaluate(const Date& date, const string& event)
 {
@@ -34,6 +40,9 @@ bool DateComparisonNode::Evaluate(const Date& date, const string& event)
 		break;
 	}
 }
+
+EventComparisonNode::EventComparisonNode(const Comparison& cmp, const string& event) :
+	cmp_(cmp), event_(event) {}
 
 bool EventComparisonNode::Evaluate(const Date& date, const string& event)
 {

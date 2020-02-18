@@ -1,5 +1,5 @@
 #include"database.h"
-void Database::Print(ostream& os)
+void Database::Print(ostream& os) const
 {
 	for (const auto& item : base) {
 		os << item;
@@ -10,7 +10,7 @@ void Database::Add(Date date, string event)
 {
 	base[date].insert(event);
 }
-string Database::Last(Date date)
+string Database::Last(Date date) const
 {
 	shared_ptr<Node> node;
 	node = make_shared<DateComparisonNode>(Comparison::LessOrEqual, date);
@@ -23,8 +23,12 @@ string Database::Last(Date date)
 		throw invalid_argument("");
 	else
 	{
-		auto it = entries.end()--;
-		return *(it->second.end()--);
+		auto it = entries.end()--; 
+		string tmp;
+		for (const auto& item : it->second) {
+			tmp = item;
+		}
+		return tmp;
 	}
 }
 
@@ -36,3 +40,4 @@ ostream& operator << (ostream& os, const pair<const Date, unordered_set<string>>
 	}
 	return os;
 }
+

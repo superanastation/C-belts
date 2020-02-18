@@ -18,6 +18,13 @@ int Date::GetDay() const
 	return day;
 }
 
+Date ParseDate(istream& iss) {
+	int year, month, day;
+	char def1, def2;
+	iss >> year >> def1 >> month >> def2 >> day;
+	return Date(year, month, day);
+}
+
 ostream& operator << (ostream& os, const Date& date)
 {
 	os << setfill('0') << setw(4) << date.GetYear() << "-" << setw(2) << date.GetMonth() << "-" << setw(2) << date.GetDay();

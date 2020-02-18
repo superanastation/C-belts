@@ -5,10 +5,8 @@
 using namespace std;
 
 string ParseEvent(istream& is) {
-	// по идее я должна знать как считать все символы кроме пробелов в начале
 	string res;
 	char c;
-	//bool first = true;
 	if (is.peek() == ' ')
 	{
 		while (is.peek()== ' ') {
@@ -20,12 +18,7 @@ string ParseEvent(istream& is) {
 	return res;
 }
 
-Date ParseDate(istringstream& iss) {
-	int year, month, day;
-	char def1, def2;
-	iss >> year >> def1 >> month >> def2 >> day;
-	return Date(year, month, day);
-}
+
 
 template <class It> shared_ptr<Node> ParseComparison(It& current, It end) {
 	if (current == end) {
@@ -96,12 +89,12 @@ shared_ptr<Node> ParseExpression(It& current, It end, unsigned precedence) {
 	shared_ptr<Node> left;
 
 	if (current->type == TokenType::PAREN_LEFT) {
-		++current; // consume '('
+		++current;
 		left = ParseExpression(current, end, 0u);
 		if (current == end || current->type != TokenType::PAREN_RIGHT) {
 			throw logic_error("Missing right paren");
 		}
-		++current; // consume ')'
+		++current;
 	}
 	else {
 		left = ParseComparison(current, end);
@@ -123,7 +116,7 @@ shared_ptr<Node> ParseExpression(It& current, It end, unsigned precedence) {
 			break;
 		}
 
-		++current; // consume op
+		++current; 
 
 		left = make_shared<LogicalOperationNode>(
 			logical_operation, left, ParseExpression(current, end, current_precedence)

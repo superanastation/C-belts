@@ -13,4 +13,3 @@ void TestParseCondition();
 
 string ParseEvent(istream& is);
 
-Date ParseDate(istringstream& iss);

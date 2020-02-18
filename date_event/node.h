@@ -1,5 +1,6 @@
 #pragma once
 #include"date.h"
+#include<memory>
 //#include"condition_parser.h"
 
 enum class Comparison {
@@ -19,7 +20,7 @@ enum class LogicalOperation {
 class Node {
 public:
 	Node() {};
-	virtual bool Evaluate(const Date& date, const string& event)=0;	// судя по всему проверка соответствует ли данное событие данной дате. откуда только доступ к базе непонятно
+	virtual bool Evaluate(const Date& date, const string& event)=0;	
 };
 
 class EmptyNode :public Node
@@ -33,8 +34,7 @@ class LogicalOperationNode : public Node
 {
 public:
 
-	LogicalOperationNode(const LogicalOperation& l_op,const shared_ptr<Node>& node_left,const shared_ptr<Node>& node_right):
-		l_op_(l_op),node_left_(node_left),node_right_(node_right){}
+	LogicalOperationNode(const LogicalOperation& l_op, const shared_ptr<Node>& node_left, const shared_ptr<Node>& node_right);
 
 	bool Evaluate(const Date& date, const string& event) override;
 
@@ -49,10 +49,8 @@ class DateComparisonNode : public Node
 {
 public:
 
-	DateComparisonNode(const Comparison& cmp, const Date& date):
-		cmp_(cmp), date_(date){}
+	DateComparisonNode(const Comparison& cmp, const Date& date);
 
-	// сравнивает входные данные с помощью cmp с date_
 	bool Evaluate(const Date& date, const string& event) override;
 
 protected:
@@ -64,10 +62,8 @@ class EventComparisonNode : public Node
 {
 public:
 
-	EventComparisonNode(const Comparison& cmp,const string& event):
-		cmp_(cmp), event_(event){}
+	EventComparisonNode(const Comparison& cmp, const string& event);
 
-	// сравнивает входные данные с помощью cmp с event
 	bool Evaluate(const Date& date, const string& event) override;
 
 protected:
