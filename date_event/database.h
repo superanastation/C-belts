@@ -4,7 +4,6 @@
 #include<map>
 #include<unordered_set>
 #include"node.h"
-#include<functional>
 
 using namespace std;
 
@@ -17,7 +16,7 @@ public:
 
 	string Last(Date date) const;
 
-	map<Date, unordered_set<string>> FindIf(function<bool(Date, string)> func) const
+	template <typename T> map<Date, unordered_set<string>> FindIf(T& func) const
 	{
 		map<Date, unordered_set<string>> res;
 		for (const auto& item : base)
@@ -31,7 +30,7 @@ public:
 		return res;
 	}
 
-	int RemoveIf(function<bool(Date, string)> func)
+	template <typename T> int RemoveIf(T& func)		
 	{
 		int res=0;
 
