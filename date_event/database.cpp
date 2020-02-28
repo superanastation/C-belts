@@ -1,15 +1,19 @@
 #include"database.h"
 void Database::Print(ostream& os) const
 {
-	for (const auto& item : base) {
+	for (const auto& item : v_base) {
 		os << item;
 	}
 }
 
 void Database::Add(Date date, string event)
 {
-	if (base[date].count(event)==0)
-		base[date].insert(event);
+	if (set_base[date].count(event) == 0)
+	{
+		set_base[date].insert(event);
+		v_base[date].push_back(event);
+	}
+		
 }
 pair<Date, string> Database::Last(Date date) const
 {
@@ -18,27 +22,27 @@ pair<Date, string> Database::Last(Date date) const
 	auto predicate = [node](const Date& date, const string& event) {
 		return node->Evaluate(date, event);
 	};
-	auto it = base.rend();
-	while (it != base.rbegin()) {
-		it++;
-		auto it_ev = (it->second).begin();
-		if (predicate(it->first, (*it_ev)))
+	auto it = v_base.rbegin();
+	while (it != v_base.rend()) {
+		
+		if (predicate(it->first, (it->second).back()))
 		{
-			return make_pair(it->first, (*it_ev));
-		}		
+			return make_pair(it->first, (it->second).back());
+		}	
+		it++;
 	}
 	throw invalid_argument("");
 }
 
-map<Date, unordered_set<string>> Database::FindIf(function<bool(Date, string)> func) const
+map<Date, vector<string>> Database::FindIf(function<bool(Date, string)> func) const
 {
-	map<Date, unordered_set<string>> res;
-	for (const auto& item : base)
+	map<Date, vector<string>> res;
+	for (const auto& item : v_base)
 	{
 		for (const auto& str : item.second)
 		{
 			if (func(item.first, str))
-				res[item.first].insert(str);
+				res[item.first].push_back(str);
 		}
 	}
 	return res;
@@ -49,27 +53,20 @@ int Database::RemoveIf(function<bool(Date, string)> func)
 {
 	int res = 0;
 
-	map<Date, unordered_set<string>> data = FindIf(func);
+	map<Date, vector<string>> data = FindIf(func);
 
 	for (const auto& item : data)
 	{
-		for (const auto& str : item.second)
-		{
-			if (func(item.first, str))
-			{
-				res++;
-				if (item.second.size() > 1)
-					base.at(item.first).erase(str);
-				else
-					base.erase(item.first);
-			}
-		}
+		res += v_base.at(item.first).size();
+		v_base.at(item.first).clear();
+		v_base.erase(item.first);
+		set_base.erase(item.first);
 	}
 
 	return res;
 }
 
-ostream& operator << (ostream& os, const pair<const Date, unordered_set<string>>& d_e)
+ostream& operator << (ostream& os, const pair<const Date, vector<string>>& d_e)
 {
 	for (const auto& item : d_e.second)
 	{
