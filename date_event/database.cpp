@@ -25,7 +25,7 @@ pair<Date, string> Database::Last(Date date) const
 	auto it = v_base.rbegin();
 	while (it != v_base.rend()) {
 		
-		if (predicate(it->first, (it->second).back()))
+		if ((it->second).size()>0 && predicate(it->first, (it->second).back()))
 		{
 			return make_pair(it->first, (it->second).back());
 		}	
@@ -52,15 +52,36 @@ map<Date, vector<string>> Database::FindIf(function<bool(Date, string)> func) co
 int Database::RemoveIf(function<bool(Date, string)> func) 
 {
 	int res = 0;
+	//map<Date, set<string>> found;
+	//for (const auto& item : v_base)
+	//{
+	//	for (const auto& str : item.second)
+	//	{
+	//		if (func(item.first, str))
+	//			found[item.first].insert(str);
+	//	}
+	//}
+	//map<Date, vector<string>> data = FindIf(func);
 
-	map<Date, vector<string>> data = FindIf(func);
-
-	for (const auto& item : data)
+	for (const auto& item : v_base)
 	{
-		res += v_base.at(item.first).size();
-		v_base.at(item.first).clear();
-		v_base.erase(item.first);
-		set_base.erase(item.first);
+		auto it = stable_partition(v_base.at(item.first).begin(), v_base.at(item.first).end(), [item,func](string str) {
+			return !func(item.first, str);
+		});
+		res += v_base.at(item.first).end() - it;
+		for (auto it1 = it; it1 != v_base.at(item.first).end(); it1++) {
+			set_base.at(item.first).erase(*it1);
+			if (set_base.at(item.first).size() == 0)
+				set_base.erase(item.first);
+		}
+		v_base.at(item.first).erase(it, v_base.at(item.first).end());
+		//if (v_base.at(item.first).size() == 0)
+		//	v_base.erase(item.first);
+		//for (const auto& event : set_base.at(item.first))
+		//{
+		//	if (func(item.first, event))
+		//		set_base.at(item.first).erase(event);
+		//}
 	}
 
 	return res;
@@ -77,6 +98,6 @@ ostream& operator << (ostream& os, const pair<const Date, vector<string>>& d_e)
 
 ostream& operator << (ostream& os, const pair<const Date, string>& d_e)
 {
-		os << d_e.first << " " << d_e.second << endl;
+	os << d_e.first << " " << d_e.second;// << endl;
 	return os;
 }

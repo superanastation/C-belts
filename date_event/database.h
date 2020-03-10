@@ -6,6 +6,7 @@
 #include"node.h"
 #include<functional>
 #include<utility>
+#include<algorithm>
 
 using namespace std;
 
@@ -19,8 +20,6 @@ public:
 	pair<Date,string> Last(Date date) const;
 
 	map<Date, vector<string>> FindIf(function<bool(Date, string)> func) const;
-
-	string FindLast(function<bool(Date, string)> func) const;
 
 	int RemoveIf(function<bool(Date, string)> func);
 
