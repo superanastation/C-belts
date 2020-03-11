@@ -21,3 +21,4 @@ void TestDbRemoveIf();
 void TestInsertionOrder();
 void TestsMyCustom();
 void TestDatabase();
+void TestAnast();

@@ -34,15 +34,17 @@ pair<Date, string> Database::Last(Date date) const
 	throw invalid_argument("");
 }
 
-map<Date, vector<string>> Database::FindIf(function<bool(Date, string)> func) const
+// проблема в том, что здесь будет количество найдённых по размеру мапы, а она равна количеству дат, а надо количество найденных событий
+vector<pair<Date,string>> Database::FindIf(function<bool(Date, string)> func) const
 {
-	map<Date, vector<string>> res;
+	vector<pair<Date, string>> res;
 	for (const auto& item : v_base)
 	{
 		for (const auto& str : item.second)
 		{
 			if (func(item.first, str))
-				res[item.first].push_back(str);
+				res.push_back(make_pair(item.first, str));
+				//res[item.first].push_back(str);
 		}
 	}
 	return res;
@@ -99,5 +101,14 @@ ostream& operator << (ostream& os, const pair<const Date, vector<string>>& d_e)
 ostream& operator << (ostream& os, const pair<const Date, string>& d_e)
 {
 	os << d_e.first << " " << d_e.second;// << endl;
+	return os;
+}
+
+ostream& operator << (ostream& os, const vector<pair<const Date, string>>& d_e)
+{
+	for (const auto& item : d_e)
+	{
+		os << item;
+	}
 	return os;
 }

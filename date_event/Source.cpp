@@ -103,5 +103,6 @@ void TestAll() {
 	tr.RunTest(TestDbRemoveIf, "TestDbRemoveIf");
 	tr.RunTest(TestInsertionOrder, "TestInsertionOrder");
 	tr.RunTest(TestsMyCustom, "TestsMyCustom");
-	tr.RunTest(TestDatabase, "TestDatabase");
+	tr.RunTest(TestDatabase, "TestDatabase"); 
+	tr.RunTest(TestAnast, "TestAnast"); 
 }

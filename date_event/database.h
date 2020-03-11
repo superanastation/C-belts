@@ -19,7 +19,7 @@ public:
 
 	pair<Date,string> Last(Date date) const;
 
-	map<Date, vector<string>> FindIf(function<bool(Date, string)> func) const;
+	vector<pair<Date, string>> FindIf(function<bool(Date, string)> func) const;
 
 	int RemoveIf(function<bool(Date, string)> func);
 
@@ -30,3 +30,4 @@ protected:
 
 ostream& operator << (ostream& os, const pair<const Date, vector<string>>& d_e);
 ostream& operator << (ostream& os, const pair<const Date, string>& d_e);
+ostream& operator << (ostream& os, const vector<pair<const Date, string>>& d_e);

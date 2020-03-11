@@ -109,7 +109,7 @@ string DoFind(Database& db, const string& str) {
 	const auto entries = db.FindIf(predicate);
 	ostringstream os;
 	for (const auto& entry : entries) {
-		os << entry;// << endl;
+		os << entry << endl;
 	}
 	os << entries.size();
 	return os.str();
@@ -192,17 +192,30 @@ void TestDbLast() {
 	{
 		ostringstream os;
 		os << db.Last({ 2017, 1, 2 });
-		AssertEqual("2017-01-01 new year\n", os.str(), "greater than date");
+		AssertEqual("2017-01-01 new year", os.str(), "greater than date");
 	}
 	{
 		ostringstream os;
 		os << db.Last({ 2017, 1, 1 });
-		AssertEqual("2017-01-01 new year\n", os.str(), "eq to date");
+		AssertEqual("2017-01-01 new year", os.str(), "eq to date");
 	}
 	{
 		ostringstream os;
 		os << db.Last({ 2017, 1, 10 });
-		AssertEqual("2017-01-07 xmas\n", os.str(), "greater than max date");
+		AssertEqual("2017-01-07 xmas", os.str(), "greater than max date");
+	}
+	{
+		db.Add({ 2017,1,1 }, "the day");
+		{
+			ostringstream os;
+			os << db.Last({ 2017, 1, 1 });
+			AssertEqual("2017-01-01 the day", os.str(), "extra eq to date");
+		}
+		{
+			ostringstream os;
+			os << db.Last({ 2017, 1, 2 });
+			AssertEqual("2017-01-01 the day", os.str(), "extra greater than date");
+		}
 	}
 }
 
@@ -304,7 +317,15 @@ void TestsMyCustom()
 		AssertEqual(1, DoRemove(db, R"(event == "e" AND event != "a")"), "My test 4");
 		db.Add({ 2019, 11, 30 }, "a");
 		AssertEqual("2019-12-03 f\n1", DoFind(db, R"(date >= 2019-12-3)"), "My test 5");
+		// replacement
 		//AssertEqual(Entry({ 2019, 12, 3 }, "f"), db.Last({ 2019, 12, 4 }), " My test 6");
+		{
+			ostringstream os;
+			os << db.Last({ 2019, 12, 4 });
+			AssertEqual("2019-12-03 f", os.str(), "replacement My test 6");
+		}
+		
+		
 
 		try
 		{
@@ -316,11 +337,29 @@ void TestsMyCustom()
 		}
 
 		//AssertEqual(Entry({ 2019, 12, 2 }, "c c"), db.Last({ 2019, 12, 2 }), " My test 7");
+		// replacement
+		{
+			ostringstream os;
+			os << db.Last({ 2019, 12, 2 });
+			AssertEqual("2019-12-02 c c", os.str(), "replacement My test 7");
+		}
 
 		//AssertEqual(Entry({ 2019, 12, 3 }, "f"), db.Last({ 2019, 12, 4 }), " My test 8");
+		// replacement
+		{
+			ostringstream os;
+			os << db.Last({ 2019, 12, 4 });
+			AssertEqual("2019-12-03 f", os.str(), "replacement My test 8");
+		}
 
 		db.Add({ 2019, 12, 3 }, "m");
 		//AssertEqual(Entry({ 2019, 12, 3 }, "m"), db.Last({ 2019, 12, 3 }), " My test 9");
+		// replacement
+		{
+			ostringstream os;
+			os << db.Last({ 2019, 12, 3 });
+			AssertEqual("2019-12-03 m", os.str(), "replacement My test 9");
+		}
 
 		AssertEqual(1, DoRemove(db, R"(event == "e" AND event != "a" OR event == "m" AND date == 2019-12-3)"), "My test 10");
 
@@ -394,9 +433,21 @@ void TestsMyCustom()
 		db.Add({ 2019, 12, 1 }, "c");
 
 		//AssertEqual(Entry({ 2019, 12, 1 }, "c"), db.Last({ 2019, 12, 1 }), " My test 20");
-
+		// replacement
+		{
+			ostringstream os;
+			os << db.Last({ 2019, 12, 1 });
+			AssertEqual("2019-12-01 c", os.str(), "replacement My test 20");
+		}
 		db.Add({ 2019, 12, 1 }, "b");
 		//AssertEqual(Entry({ 2019, 12, 1 }, "c"), db.Last({ 2019, 12, 1 }), " My test 21");
+		// replacement
+		{
+			ostringstream os;
+			os << db.Last({ 2019, 12, 1 });
+			AssertEqual("2019-12-01 c", os.str(), "replacement My test 21");
+			// here is 'c' cause 'b' was added earlier, 'b' in database already
+		}
 
 		ostringstream out;
 		db.Print(out);
@@ -427,6 +478,9 @@ void TestDatabase() {
 		AssertEqual(db.RemoveIf(predicate), 1, "Db Add2-Del-Add 1");
 		db.Add(d, "e1");
 		//AssertEqual(db.FindIf(empty_predicate).size(), 2, "Db Add2-Del-Add 2");
+		// replacement
+		// last 1 cause 1 date in base
+		AssertEqual("2019-01-01 e2\n2019-01-01 e1\n2", DoFind(db, ""), "Db Add2-Del-Add 2");
 	}
 
 	// Add
@@ -435,12 +489,14 @@ void TestDatabase() {
 		Date d(2019, 1, 1);
 		db.Add(d, "e1");
 		db.Add(d, "e1");
-		istringstream is("date == 2019-01-01");
-		auto condition = ParseCondition(is);
-		auto predicate = [condition](const Date& date, const string& event) {
-			return condition->Evaluate(date, event);
-		};
+		//istringstream is("date == 2019-01-01");
+		//auto condition = ParseCondition(is);
+		//auto predicate = [condition](const Date& date, const string& event) {
+		//	return condition->Evaluate(date, event);
+		//};
 		//AssertEqual(db.FindIf(predicate).size(), 1, "Db Add Duplicates 1");
+		// replacement
+		AssertEqual("2019-01-01 e1\n1", DoFind(db, "date == 2019-01-01"), "Db Add Duplicates 1");
 	}
 
 	// Last
@@ -452,10 +508,21 @@ void TestDatabase() {
 		db.Add(d1, "e1");
 		db.Add(d2, "e2");
 		//AssertEqual(db.Last(d), Entry({ 2018, 12, 22 }, "e2"), "Db Last 1");
+		// replacement
+		{
+			ostringstream os;
+			os << db.Last(d);
+			AssertEqual("2018-12-22 e2", os.str(), "Db Last 1");
+		}
 		Date d3(2018, 12, 24);
 		db.Add(d3, "e3");
 		//AssertEqual(db.Last(d), Entry({ 2018, 12, 24 }, "e3"), "Db Last 2");
-
+		// replacement
+		{
+			ostringstream os;
+			os << db.Last(d);
+			AssertEqual("2018-12-24 e3", os.str(), "Db Last 2");
+		}
 		// Get last event for date before first event 
 		try {
 			Date d4(2017, 2, 2);
@@ -474,10 +541,27 @@ void TestDatabase() {
 		};
 		db.RemoveIf(predicate);
 		//AssertEqual(db.Last(d), Entry({ 2018, 12, 22 }, "e2"), "Db Last 4");
-
+		// replacement
+		{
+			ostringstream os;
+			os << db.Last(d);
+			AssertEqual("2018-12-22 e2", os.str(), "Db Last 4");
+		}
 		//AssertEqual(db.Last(d1), Entry({ 2019, 1, 2 }, "e1"), "Db Last 5");
+		// replacement
+		{
+			ostringstream os;
+			os << db.Last(d1);
+			AssertEqual("2019-01-02 e1", os.str(), "Db Last 5");
+		}
 		db.Add(d2, "e4");
 		//AssertEqual(db.Last(d2), Entry({ 2018, 12, 22 }, "e4"), "Db Last 6");
+		// replacement
+		{
+			ostringstream os;
+			os << db.Last(d2);
+			AssertEqual("2018-12-22 e4", os.str(), "Db Last 6");
+		}
 	}
 
 	// Del
@@ -556,6 +640,8 @@ void TestDatabase() {
 			return condition->Evaluate(date, event);
 		};
 		//AssertEqual(db.FindIf(predicate).size(), 2, "Db Find 1");
+		// replacement
+		AssertEqual("2018-01-07 e3\n2018-01-07 e4\n2", DoFind(db, "date == 2018-01-07"), "Db Find 1");
 	}
 	{
 		Database db;
@@ -569,6 +655,8 @@ void TestDatabase() {
 			return condition->Evaluate(date, event);
 		};
 		//AssertEqual(db.FindIf(predicate).size(), 4, "Db Find 2");
+		// replacement
+		AssertEqual("2018-01-07 e3\n2018-01-07 e4\n2019-01-01 e1\n2019-01-01 e2\n4", DoFind(db, "date >= 2018-01-07 AND date <= 2020-01-01"), "Db Find 2");
 	}
 	{
 		Database db;
@@ -577,6 +665,8 @@ void TestDatabase() {
 		db.Add({ 2018, 1, 7 }, "e3");
 		db.Add({ 2018, 1, 7 }, "e4");
 		//AssertEqual(db.FindIf(empty_predicate).size(), 4, "Db Find 3");
+		// replacement
+		AssertEqual("2018-01-07 e3\n2018-01-07 e4\n2019-01-01 e1\n2019-01-01 e2\n4", DoFind(db, ""), "Db Find 3");
 	}
 	{
 		Database db;
@@ -590,6 +680,8 @@ void TestDatabase() {
 			return condition->Evaluate(date, event);
 		};
 		//AssertEqual(db.FindIf(predicate).size(), 1, "Db Find 4");
+		// replacement
+		AssertEqual("2019-01-01 e1\n1", DoFind(db, R"(event == "e1")"), "Db Find 4");
 	}
 
 	{
@@ -604,6 +696,8 @@ void TestDatabase() {
 			return condition->Evaluate(date, event);
 		};
 		//AssertEqual(db.FindIf(predicate).size(), 2, "Db Find 5");
+		// replacement
+		AssertEqual("2019-01-01 e1\n2019-01-01 e2\n2", DoFind(db, R"(event == "e1" OR date == 2019-01-01)"), "Db Find 5");
 	}
 
 	// Add - Del - Add - Del
@@ -747,5 +841,22 @@ void TestEmptyNode() {
 		Assert(en.Evaluate(Date{ 0, 1, 1 }, "abc"), "EmptyNode 1");
 		Assert(en.Evaluate(Date{ 2017, 11, 18 }, "def"), "EmptyNode 2");
 		Assert(en.Evaluate(Date{ 9999, 12, 31 }, "ghi"), "EmptyNode 3");
+	}
+}
+
+void TestAnast() {
+	{
+		Database db;
+		db.Add({ 2020, 3, 10 }, "tuesday");
+		AssertEqual(1, DoRemove(db, R"(date == "2020-03-10")"), "anast:remove by date");
+		ostringstream out;
+		db.Print(out);
+		AssertEqual("", out.str(), "anast: epmty print()");
+	}
+	{
+		Database db;
+		db.Add({ 2020, 3, 10 }, "tuesday");
+		AssertEqual(1, DoRemove(db, R"(date == "2020-03-10")"), "anast:remove by date");
+		AssertEqual("0", DoFind(db, "date == 2017-01-01"), "simple find by date");
 	}
 }
