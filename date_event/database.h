@@ -13,7 +13,7 @@ using namespace std;
 class Database
 {
 public:
-	void Add(Date date, string event);
+	void Add(const Date& date, const string& event);
 
 	void Print(ostream& os) const;
 
